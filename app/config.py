@@ -8,8 +8,11 @@ class Settings(BaseSettings):
     mcp_port: int = 8410
     docs_port: int = 8411
 
-    # core-bancario-mock has no auth of its own (unlike renegotiation-service) - this is a direct,
-    # unauthenticated internal call, no service token involved. See card_client.py.
+    # core-bancario-mock has no auth middleware of its own (unlike renegotiation-service's
+    # downstream, which sits behind PlatformMiddleware) - it does not validate the token attached
+    # below. We still sign and attach one, for parity with every other synchronous hop in the
+    # platform and so nothing has to change on this side once core-bancario-mock gains real
+    # validation. See card_client.py.
     core_bancario_base_url: str = "http://localhost:9405"
     core_bancario_retry_attempts: int = 2
 
